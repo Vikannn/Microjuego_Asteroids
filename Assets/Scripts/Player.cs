@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public float thrustForce = 5f;
     public float rotationSpeed = 120f;
     public float recoilForce = 5f;
+    public float bounceForce = 5f;
 
     public GameObject gun;
 
@@ -18,7 +19,8 @@ public class Player : MonoBehaviour
     public static int SCORE = 0;
     public static int initialHP = 4;
     private static int HP = initialHP;
-    
+    private Camera mainCamera;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {   
@@ -29,6 +31,7 @@ public class Player : MonoBehaviour
         go = GameObject.FindGameObjectWithTag("UI_SCORE");
         go.GetComponent<Text>().text = "SCORE: " + Player.SCORE;
 
+        mainCamera = Camera.main; 
         _rigid = GetComponent<Rigidbody>();
     }
 
@@ -66,6 +69,28 @@ public class Player : MonoBehaviour
             bulletScript.targetVector = thrustDirection;
 
             _rigid.AddForce(thrustDirection * -1f * recoilForce);
+        }
+
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0f, 0f, 1f));
+        Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(1f, 1f, 1f));
+        
+        Vector3 currentPos = transform.position;
+
+        if (currentPos.x <= topRight.x) {
+            
+            _rigid.AddForce(Vector3.right * bounceForce);
+        }
+        if (currentPos.x >= bottomLeft.x) {
+            
+            _rigid.AddForce(Vector3.left * bounceForce);
+        } 
+        if (currentPos.y >= topRight.y) {
+           
+            _rigid.AddForce(Vector3.down * bounceForce);
+        } 
+        if (currentPos.y <= bottomLeft.y) {
+            
+            _rigid.AddForce(Vector3.up * bounceForce);
         }
     }
 

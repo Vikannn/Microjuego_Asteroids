@@ -38,7 +38,6 @@ public class Meteor : MonoBehaviour
         Vector3 leftDirection = new Vector3(-objectVector.y, objectVector.x, 0).normalized;
         Vector3 rightDirection = new Vector3(objectVector.y, -objectVector.x, 0).normalized;
 
-        float currentOffset = offset * transform.localScale.x;
         Vector3 leftSpawnPos = transform.position + (leftDirection * offset);
         Vector3 rightSpawnPos = transform.position + (rightDirection * offset);
 
